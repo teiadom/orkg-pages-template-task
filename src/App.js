@@ -12,15 +12,16 @@ import ExampleB from 'components/ExampleB';
 class App extends Component {
     constructor(props) {
         super(props);
-        this.githubRepoURL = '#CHANGE ME';
+        // this.githubRepoURL = '#CHANGE ME';
+        this.githubRepoURL = 'https://github.com/teiadom/orkg-pages-template-task.git';
     }
 
     render() {
         return (
             <>
                 <header>
-                    <div class="navbar shadow-sm" style={{ backgroundColor: '#5f6474' }}>
-                        <div class="d-flex justify-content-between">
+                    <div className="navbar shadow-sm" style={{ backgroundColor: '#5f6474' }}>
+                        <div className="d-flex justify-content-between">
                             <a href="https://www.orkg.org/orkg/">
                                 <Logo />
                             </a>
@@ -44,14 +45,14 @@ class App extends Component {
                         </div>
                     </div>
                 </header>
-                <Container fluid noGutters>
+                <Container fluid>
                     <Container
                         style={{
                             backgroundColor: '#9c9c9c',
                             marginLeft: '10%',
                             marginRight: '10%',
                             maxWidth: '80%',
-                            height: 'calc(100vh - 40px)',
+                            // height: 'calc(100vh - 40px)',
                             overflow: 'auto'
                         }}
                     >

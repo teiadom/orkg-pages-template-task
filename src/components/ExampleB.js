@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './visWidgetConfig.css';
-import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { Spinner } from 'reactstrap';
 import { getPaperById } from '../network/networkRequests';
 
 class ExampleB extends Component {
@@ -10,6 +9,7 @@ class ExampleB extends Component {
         this.state = {
             loading: true
         };
+        this.doiResolver = 'https://doi.org/';
     }
 
     componentDidMount() {
@@ -46,7 +46,9 @@ class ExampleB extends Component {
                         })}
                     </div>
                     <div>Paper Data:</div>
-                    <div>Paper doi: {doiValue}</div>
+                    <div>
+                        Paper doi: <a href={`${this.doiResolver}${doiValue}`}>{doiValue}</a>
+                    </div>
                 </div>
             );
         }
@@ -63,14 +65,7 @@ class ExampleB extends Component {
                     </a>
                 </div>
                 <div className={'bodyStyle'}>
-                    {this.state.loading && (
-                        <h2 className="h5">
-                            <span>
-                                <Icon icon={faSpinner} spin />
-                            </span>{' '}
-                            Loading ...
-                        </h2>
-                    )}
+                    {this.state.loading && <Spinner color="dark" />}
                     {!this.state.loading && this.renderData()}
                 </div>
             </div>

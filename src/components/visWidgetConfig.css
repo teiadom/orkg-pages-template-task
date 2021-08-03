@@ -17,7 +17,8 @@
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     border-top:none;
-    height:90%;
+    /*height:90%;*/
+    overflow: auto;
     color:black;
 }
 

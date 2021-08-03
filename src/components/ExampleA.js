@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './visWidgetConfig.css';
-import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { Spinner, Table } from 'reactstrap';
 import { getComparisonById } from 'network/networkRequests';
+import { isValidHttpUrl } from '../utils/helpers';
 
 class ExampleA extends Component {
     constructor(props) {
@@ -53,37 +53,21 @@ class ExampleA extends Component {
     renderComparisonTable = () => {
         const dataFrame = this.state.requestedData.comparisonData;
         return (
-            <table style={{ width: '100%', overflow: 'auto', display: 'block' }}>
+            <Table responsive bordered striped style={{ width: '100%' }}>
                 {/*  define headers*/}
-                <thead style={{ borderTop: '1px solid black', borderBottom: '1px solid black' }}>
+                <thead>
                     <tr>
-                        <th
-                            style={{
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                borderRight: '1px solid black',
-                                borderLeft: '1px solid black',
-                                padding: '3px'
-                            }}
-                        >
-                            Contribution
+                        <th>
+                            <span className="table-column">Contribution</span>
                         </th>
                         {dataFrame.properties
                             .filter(property => property.active === true)
                             .map(property => {
                                 return (
-                                    <th
-                                        key={property.label}
-                                        style={{
-                                            whiteSpace: 'nowrap',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            borderRight: '1px solid black',
-                                            padding: '3px'
-                                        }}
-                                    >
-                                        {property.label}
+                                    <th key={property.label}>
+                                        <span className="table-column">
+                                            {property.label}
+                                        </span>
                                     </th>
                                 );
                             })}
@@ -92,32 +76,23 @@ class ExampleA extends Component {
                 <tbody>
                     {Object.keys(dataFrame.data).map((data, id) => {
                         return (
-                            <tr key={'tr_id' + id} style={{ border: '1px solid black', borderTop: 'none' }}>
-                                <td
-                                    key={'td_id_' + id}
-                                    style={{
-                                        whiteSpace: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        borderRight: '1px solid black',
-                                        borderLeft: '1px solid black',
-                                        padding: '3px',
-                                        maxWidth: '200px'
-                                    }}
-                                >
-                                    {dataFrame.contributions[id].contributionLabel +
-                                        '(' +
-                                        dataFrame.contributions[id].id +
-                                        '/' +
-                                        dataFrame.contributions[id].paperId +
-                                        ')'}
+                            <tr key={'tr_id' + id}>
+                                <td key={'td_id_' + id}>
+                                    <span className="table-column">
+                                        {dataFrame.contributions[id].contributionLabel +
+                                            '(' +
+                                            dataFrame.contributions[id].id +
+                                            '/' +
+                                            dataFrame.contributions[id].paperId +
+                                            ')'}
+                                    </span>
                                 </td>
                                 {this.createRows(id)}
                             </tr>
                         );
                     })}
                 </tbody>
-            </table>
+            </Table>
         );
     };
 
@@ -128,20 +103,19 @@ class ExampleA extends Component {
         return activeProperties.map(property => {
             const dataValues = dataFrame.data[property.id][rowId];
             return (
-                <td
-                    key={'td_id' + rowId + '_' + property.id}
-                    style={{
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        borderRight: '1px solid black',
-                        padding: '3px',
-                        maxWidth: '200px'
-                    }}
-                >
-                    {dataValues.map(val => {
-                        return val.label + ' ';
-                    })}
+                <td key={'td_id' + rowId + '_' + property.id}>
+                    <span className="table-column">
+                        {dataValues.map((val, index) => {
+                            if (isValidHttpUrl(val.label)) {
+                                return (
+                                    <a href={val.label} key={index}>
+                                        {val.label} {''}
+                                    </a>
+                                );
+                            }
+                            return val.label + ' ';
+                        })}
+                    </span>
                 </td>
             );
         });
@@ -158,14 +132,7 @@ class ExampleA extends Component {
                     </a>
                 </div>
                 <div className={'bodyStyle'}>
-                    {this.state.loading && (
-                        <h2 className="h5">
-                            <span>
-                                <Icon icon={faSpinner} spin />
-                            </span>{' '}
-                            Loading ...
-                        </h2>
-                    )}
+                    {this.state.loading && <Spinner color="dark" />}
                     {!this.state.loading && this.renderData()}
                 </div>
             </div>
